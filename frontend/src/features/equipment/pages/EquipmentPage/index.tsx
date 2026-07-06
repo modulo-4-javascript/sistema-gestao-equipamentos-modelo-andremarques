@@ -1,5 +1,6 @@
 import { message } from 'antd'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { AppLayout } from '../../../../app/layout/AppLayout'
 import { EquipmentFilters } from '../../components/EquipmentFilters'
 import { EquipmentFormModal } from '../../components/EquipmentFormModal'
@@ -19,7 +20,9 @@ import type { Equipment, EquipmentStatus, EquipmentType } from '../../types/equi
 import { Container } from './styles'
 
 export function EquipmentPage() {
-  const [messageApi, contextHolder] = message.useMessage()
+  const navigate = useNavigate()
+  const messageApi = message.useMessage()[0]
+  const contextHolder = message.useMessage()[1]
 
   // Estados dos filtros. Cada campo da área de filtros controla um estado aqui.
   const [searchText, setSearchText] = useState('')
@@ -75,6 +78,10 @@ export function EquipmentPage() {
     setSelectedType(undefined)
   }
 
+  function handleViewEquipment(equipment: Equipment) {
+    navigate(`/equipment/${equipment.id}`)
+  }
+
   // AULA 05 - parte prática:
   // Primeiro deixamos a lista sem filtro para a tela aparecer.
   const visibleEquipment = equipmentMock
@@ -109,6 +116,7 @@ export function EquipmentPage() {
           onChangeStatusEquipment={setEquipmentInStatus}
           onEditEquipment={handleEditEquipment}
           onRemoveEquipment={setEquipmentToRemove}
+          onViewEquipment={handleViewEquipment}
         />
 
         <EquipmentFormModal
